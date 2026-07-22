@@ -1,0 +1,1543 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* ────────────────────────────────────────────────────────
+   1. DESIGN TOKENS & CSS VARIABLES
+   ──────────────────────────────────────────────────────── */
+:root {
+  /* ----------------------------------
+   * NEW DISHA FOR INDIA BRAND TOKENS
+   * ---------------------------------- */
+  --primary-blue: #0B3B91;
+  --secondary-blue: #124AA0;
+  --background: #F8FAFC;
+  --surface: #FFFFFF;
+  --text-primary: #1E293B;
+  --text-secondary: #64748B;
+  --border: #E2E8F0;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --radius-card: 12px;
+  --radius-btn: 8px;
+
+  /* Typography Scale */
+  --text-page-title: 24px;
+  --text-section-title: 18px;
+  --text-card-title: 16px;
+  --text-label: 14px;
+  --text-supporting: 13px;
+  --text-caption: 12px;
+
+  /* Spacing Scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Typography */
+  --font-primary: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  /* Standardizing on sans for headings per design */
+
+  /* ----------------------------------
+   * BACKWARD COMPATIBILITY LAYER
+   * ---------------------------------- */
+  --color-primary: var(--primary-blue);
+  --color-primary-hover: var(--secondary-blue);
+  --color-secondary: #059669;
+  /* Keep minimal green */
+  --color-secondary-hover: #10B981;
+  --color-accent: var(--primary-blue);
+  --color-accent-hover: var(--secondary-blue);
+
+  --color-bg: var(--background);
+  --color-card: var(--surface);
+  --color-heading: var(--text-primary);
+  --color-body: var(--text-secondary);
+  --color-border: var(--border);
+
+  /* Status Colors */
+  --color-success: #059669;
+  --color-warning: #D97706;
+  /* Keep warning semantic */
+  --color-error: #DC2626;
+  /* Keep error semantic */
+  --color-info: var(--primary-blue);
+  --color-purple: var(--text-secondary);
+  /* Deprecating purple, fallback to slate */
+
+  /* Gradients (Flattened for now) */
+  --gradient-primary: var(--primary-blue);
+  --gradient-hover: var(--secondary-blue);
+  --gradient-glow: none;
+
+  /* Shadows - Migrated to new soft shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 55, 100, 0.04);
+  --shadow-sm: 0 2px 8px -2px rgba(15, 55, 100, 0.06);
+  --shadow-md: var(--card-shadow);
+  --shadow-lg: var(--card-shadow);
+  --shadow-xl: var(--card-shadow);
+  --shadow-glow: none;
+  --shadow-inner: inset 0 2px 4px 0 rgba(15, 55, 100, 0.04);
+
+  /* Borders & Radius */
+  --radius-sm: 10px;
+  --radius-md: var(--radius-btn);
+  --radius-lg: var(--radius-btn);
+  --radius-xl: var(--radius-card);
+  --radius-2xl: var(--radius-card);
+
+  /* Transitions - Premium Editorial Easing */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 250ms;
+  --duration-normal: 320ms;
+  --duration-slow: 400ms;
+  --transition-fast: all var(--duration-fast) var(--ease-premium);
+  --transition-normal: all var(--duration-normal) var(--ease-premium);
+  --transition-slow: all var(--duration-slow) var(--ease-premium);
+
+  /* Spacing */
+  --section-y: 5rem;
+  --navbar-height: 72.96px;
+  --sidebar-width: 249.6px;
+}
+
+
+
+.admin-theme {
+  /* Green Theme Colors */
+  --primary-blue: #15803D;          /* Map primary brand to Primary Green */
+  --secondary-blue: #166534;        /* Map secondary brand to Hover Green */
+  
+  --color-primary: #15803D;         /* Primary Green */
+  --color-primary-hover: #166534;   /* Hover */
+  --color-secondary: #16A34A;       /* Secondary Green */
+  --color-secondary-hover: #15803D;
+  --color-accent: #15803D;
+  --color-accent-hover: #166534;
+  
+  /* Surfaces & Backgrounds */
+  --color-bg: #F0FDF4;              /* Background Tint */
+  --background: #F0FDF4;            /* Background Tint for explicit vars */
+  --color-card: #FFFFFF;            /* White */
+  --surface: #FFFFFF;               /* White for explicit vars */
+  
+  /* Typography */
+  --color-heading: #111827;         /* Text Primary */
+  --text-primary: #111827;
+  --color-body: #4B5563;            /* Text Secondary */
+  --text-secondary: #4B5563;
+  
+  /* Borders */
+  --color-border: #BBF7D0;          /* Border */
+  --border: #BBF7D0;
+  
+  /* Status */
+  --color-success: #22C55E;         /* Success */
+  --color-warning: #D97706;         /* Amber */
+  --color-error: #DC2626;           /* Red */
+  --color-info: #4B5563;            /* Gray */
+  
+  /* Gradients */
+  --gradient-primary: #15803D;
+  --gradient-hover: #166534;
+}
+
+/* ────────────────────────────────────────────────────────
+   2. BASE RESET & HTML STYLES
+   ──────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 15.36px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-bg);
+  color: var(--color-body);
+  line-height: 1.7;
+  font-weight: 500;
+  min-height: 100vh;
+  transition: background-color var(--duration-normal) var(--ease-premium), color var(--duration-normal) var(--ease-premium);
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  color: var(--color-heading);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+h1 {
+  font-size: var(--text-page-title);
+}
+
+h2 {
+  font-size: var(--text-section-title);
+  letter-spacing: -0.01em;
+}
+
+h3 {
+  font-size: var(--text-card-title);
+  letter-spacing: -0.01em;
+}
+
+h4 {
+  font-size: var(--text-label);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+}
+
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ────────────────────────────────────────────────────────
+    3. REUSABLE COMPONENTS & UTILITIES
+    ──────────────────────────────────────────────────────── */
+
+/* Section spacing */
+.section {
+  padding-top: var(--section-y);
+  padding-bottom: var(--section-y);
+}
+
+.section-sm {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* Subheading utility */
+.subheading {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-body);
+  opacity: 0.75;
+}
+
+/* Core Layout Container */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Custom Grid System */
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid-cols-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+@media (max-width: 1024px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-cols-5 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+
+  .grid-cols-2,
+  .grid-cols-3,
+  .grid-cols-4,
+  .grid-cols-5 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Flex Utilities */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Card Design System */
+.card, .dashboard-card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  box-shadow: var(--card-shadow);
+  transition: var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(211, 84, 0, 0.12);
+}
+
+/* Premium Button System */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: var(--text-label);
+  padding: 0 var(--space-4);
+  height: 36px;
+  border-radius: var(--radius-btn);
+  transition: var(--transition-fast);
+  text-align: center;
+  user-select: none;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+  color: #ffffff;
+  transform: scale(0.98);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: rgba(11, 59, 145, 0.05);
+  /* Soft primary hover */
+  border-color: var(--color-primary-hover);
+  color: var(--color-primary-hover);
+  transform: scale(0.98);
+}
+
+.btn-gradient {
+  background: var(--gradient-primary);
+  color: #ffffff;
+}
+
+.btn-gradient:hover {
+  background: var(--gradient-hover);
+  color: #ffffff;
+  transform: scale(0.98);
+}
+
+.btn-success {
+  background-color: var(--color-secondary);
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background-color: var(--color-secondary-hover);
+  color: #ffffff;
+}
+
+.btn-danger {
+  background-color: var(--color-error);
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+/* Badge Component */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  padding: 0 var(--space-2);
+  height: 22px;
+  border-radius: 4px;
+  text-transform: none;
+  background-color: var(--background);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.badge-blue {
+  background-color: rgba(11, 59, 145, 0.1);
+  color: var(--color-primary);
+}
+
+.badge-green {
+  background-color: rgba(5, 150, 105, 0.1);
+  color: var(--color-success);
+}
+
+.badge-orange {
+  background-color: rgba(217, 119, 6, 0.1);
+  color: var(--color-warning);
+}
+
+.badge-red {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: var(--color-error);
+}
+
+.badge-purple {
+  background-color: rgba(100, 116, 139, 0.1);
+  color: var(--color-body);
+}
+
+/* Form Control Inputs */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  color: var(--text-primary);
+  transition: var(--transition-fast);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(11, 59, 145, 0.15);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Glow effects - Disabled per brand guidelines */
+.glow-card {
+  position: relative;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--duration-slow) var(--ease-premium) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--duration-slow) var(--ease-premium) forwards;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--duration-slow) var(--ease-premium), transform var(--duration-slow) var(--ease-premium);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ────────────────────────────────────────────────────────
+   4. VOLUNTEER FRONTEND UTILITIES
+   ──────────────────────────────────────────────────────── */
+
+/* Skeleton Loader */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-bg) 25%, var(--color-border) 50%, var(--color-bg) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Spinner */
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Big Hero Buttons (Check-in/out) */
+.check-in-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 3rem;
+  border-radius: var(--radius-xl);
+  background: var(--primary-blue);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+}
+
+.check-out-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 3rem;
+  border-radius: var(--radius-xl);
+  background: transparent;
+  border: 2px solid var(--color-error);
+  color: var(--color-error);
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Timeline */
+.timeline-step {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 16px;
+  bottom: -4px;
+  width: 2px;
+  background-color: var(--color-border);
+}
+
+.timeline-step.done:not(:last-child)::before {
+  background-color: var(--color-primary);
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -1px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.timeline-dot.done {
+  width: 20px;
+  height: 20px;
+  left: -6px;
+  top: 0;
+  background-color: var(--color-primary);
+}
+
+.timeline-dot.current {
+  width: 16px;
+  height: 16px;
+  left: -4px;
+  top: 1px;
+  background-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
+}
+
+/* Calendar */
+.attendance-calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.attendance-calendar-day:hover {
+  background-color: var(--border) !important;
+}
+
+/* Hours Counter Text */
+.hours-gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: var(--font-heading);
+  font-weight: 800;
+}
+
+/* Progress Ring */
+.progress-ring-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Admin Dashboard Scoped Theme */
+.admin-theme {
+  --color-primary: #15803D;
+  --color-primary-hover: #166534;
+  --color-secondary: #DCFCE7;
+  --color-secondary-hover: #BBF7D0;
+  --color-bg: #F8FAFC;
+  --color-heading: #1F2937;
+  --primary-blue: #15803D;
+  --secondary-blue: #DCFCE7;
+}
+
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+
+/* Page Level Typography */
+.page-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.page-description {
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-relaxed);
+}
+
+.section-heading {
+  font-family: var(--font-heading);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
+}
+
+/* Card Level Typography */
+.card-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-snug);
+}
+
+.card-subtitle {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-normal);
+}
+
+.card-description {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+}
+
+/* UI Elements */
+.badge-text {
+  font-family: var(--font-primary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  line-height: var(--leading-none);
+}
+
+.table-header {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-normal);
+}
+
+.table-cell {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+}
+
+.form-label {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  line-height: var(--leading-snug);
+}
+
+.btn-text {
+  font-family: var(--font-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-tight);
+}
+
+/* Redefine hardcoded classes to use variables so they scale */
+.subheading {
+  font-size: var(--text-sm);
+}
+
+.badge {
+  font-size: var(--text-xs);
+}
+
+.form-control {
+  font-size: var(--text-base);
+}
+
+.check-in-hero,
+.check-out-hero {
+  font-size: var(--text-lg);
+}
+
+.attendance-calendar-day {
+  font-size: var(--text-sm);
+}
+
+/* --------------------------------------------------------
+   MOBILE TYPOGRAPHY OVERRIDES
+   -------------------------------------------------------- */
+@media (max-width: 767px) {
+  :root {
+    --text-xs: 0.56rem;
+    --text-sm: 0.66rem;
+    --text-base: 0.75rem;
+    --text-lg: 0.86rem;
+    --text-xl: 0.94rem;
+    --text-2xl: 1.10rem;
+    --text-3xl: 1.50rem;
+  }
+}
+
+/* Explicit Mobile Global Overrides (User Requested Failsafe) */
+@media (max-width: 767px) {
+  .page-title {
+    font-size: var(--text-3xl) !important;
+  }
+
+  .page-description {
+    font-size: var(--text-base) !important;
+  }
+
+  .card-title,
+  .dashboard-card-title,
+  h2 {
+    font-size: var(--text-lg) !important;
+  }
+
+  .card-subtitle,
+  .card-description {
+    font-size: var(--text-sm) !important;
+  }
+
+  input,
+  select,
+  textarea,
+  .form-control {
+    font-size: var(--text-base) !important;
+  }
+
+  label,
+  .form-label {
+    font-size: var(--text-sm) !important;
+  }
+
+  table,
+  table th,
+  table td,
+  .table-header,
+  .table-cell {
+    font-size: var(--text-sm) !important;
+  }
+
+  .btn,
+  .btn-text,
+  button {
+    font-size: var(--text-sm) !important;
+  }
+
+  .badge,
+  .badge-text {
+    font-size: var(--text-xs) !important;
+  }
+}
+
+/* ==========================================================================
+   VOLUNTEER DASHBOARD - MOBILE EXCLUSIVE OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 767px) {
+
+  /* Scope everything to ONLY the main volunteer dashboard */
+  .volunteer-dashboard-page {
+    padding: 0 0.8rem !important;
+  }
+
+  .volunteer-dashboard-page .dashboard-content-wrapper {
+    padding: 1.25rem 0 2rem 0 !important;
+    gap: 1.25rem !important;
+    /* Reduced vertical gap between sections */
+  }
+
+  /* 1. Global Cards Optimization */
+  .volunteer-dashboard-page .dashboard-card,
+  .volunteer-dashboard-page .dashboard-stat-card {
+    padding: 1rem 0.85rem !important;
+    /* Reduced side padding */
+    border-radius: 12px !important;
+    gap: 0.5rem !important;
+    /* Reduced internal gap */
+    min-width: 0 !important;
+    height: auto !important;
+  }
+
+  /* 2. Hero Card (Welcome Banner) */
+  .volunteer-dashboard-page .dashboard-hero-card {
+    padding: 1.25rem 1.25rem !important;
+    /* Reduced top/side padding */
+    border-radius: 16px !important;
+  }
+
+  .volunteer-dashboard-page .dashboard-hero-card h2 {
+    font-size: var(--text-2xl) !important;
+    /* Reduced Welcome text */
+  }
+
+  .volunteer-dashboard-page .dashboard-hero-card p {
+    font-size: var(--text-sm) !important;
+    /* Reduced subtitle text */
+  }
+
+  /* 3. Stat Cards & Grids */
+  .volunteer-dashboard-page .stat-card-grid,
+  .volunteer-dashboard-page .impact-card-grid,
+  .volunteer-dashboard-page .quick-action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    /* Force 2-column responsive layout */
+    gap: 0.75rem !important;
+    /* Tighter grid gaps */
+  }
+
+  /* Prevent single cards from becoming huge on weird breakpoints */
+  .volunteer-dashboard-page .impact-card-grid>div {
+    min-width: 0 !important;
+    /* prevent overflow */
+  }
+
+  /* 4. Icons Reduction */
+  .volunteer-dashboard-page .stat-card-icon-wrapper {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 10px !important;
+  }
+
+  .volunteer-dashboard-page .stat-card-icon-wrapper svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .volunteer-dashboard-page .quick-action-card svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  /* 5. Typography and Vertical Stacking for Stat Cards */
+  .volunteer-dashboard-page .dashboard-stat-card,
+  .volunteer-dashboard-page .impact-card {
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .volunteer-dashboard-page .dashboard-stat-card div:nth-child(2),
+  .volunteer-dashboard-page .impact-card div:nth-child(2) {
+    min-width: 0 !important;
+    width: 100% !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+  }
+
+  .volunteer-dashboard-page .dashboard-stat-card div:nth-child(2)>div:first-child {
+    font-size: var(--text-xs) !important;
+    /* Label */
+  }
+
+  .volunteer-dashboard-page .dashboard-stat-card div:nth-child(2)>div:nth-child(2) {
+    font-size: var(--text-lg) !important;
+    /* Value */
+  }
+
+  .volunteer-dashboard-page .impact-card>div:nth-child(2)>div:first-child {
+    font-size: var(--text-base) !important;
+    /* Impact value */
+  }
+
+  .volunteer-dashboard-page .impact-card>div:nth-child(2)>div:nth-child(2) {
+    font-size: var(--text-xs) !important;
+    /* Impact label */
+  }
+
+  /* 6. Buttons */
+  .volunteer-dashboard-page a,
+  .volunteer-dashboard-page button {
+    padding: 0.5rem 1rem !important;
+    /* Smaller horizontal/vertical padding */
+    min-height: 44px !important;
+    /* Maintain 44px minimum touch target */
+    font-size: var(--text-sm) !important;
+  }
+
+  /* Fix quick action buttons sizing which stack icon and text */
+  .volunteer-dashboard-page .quick-action-card {
+    padding: 0.85rem 0.5rem !important;
+    font-size: var(--text-xs) !important;
+    min-height: 44px !important;
+    height: auto !important;
+  }
+
+  /* 7. General Headings in Dashboard */
+  .volunteer-dashboard-page h2 {
+    font-size: var(--text-lg) !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .volunteer-dashboard-page p {
+    font-size: var(--text-sm) !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE SIDEBAR & NAVIGATION OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 767px) {
+
+  /* 1 & 4: Sidebar Navigation Links (Font Size & Height) */
+  .sidebar-nav-link {
+    font-size: var(--text-sm) !important;
+    /* Approx 25% smaller than desktop text-base */
+    padding: 0.6rem 0.85rem !important;
+    /* Reduced vertical padding */
+    gap: 0.6rem !important;
+    /* Reduced gap between icon and text */
+  }
+
+  /* 5: Scale Navigation Icons */
+  .sidebar-nav-link svg {
+    width: 15px !important;
+    /* Reduced by ~15-20% from 18px */
+    height: 15px !important;
+  }
+
+  /* 2 & 3: Hamburger and Close Icons */
+  .mobile-hamburger-btn,
+  .sidebar-close-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 44px !important;
+    /* Preserve touch target */
+    min-height: 44px !important;
+    /* Preserve touch target */
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .mobile-hamburger-btn svg,
+  .sidebar-close-btn svg {
+    width: 19px !important;
+    /* Reduced by ~20% from 24px */
+    height: 19px !important;
+  }
+}
+
+@media (max-width: 767px) {
+
+  /* ==========================================================================
+     MOBILE SIDEBAR PROFILE SECTION OPTIMIZATIONS
+     ========================================================================== */
+  /* 5. Reduce overall header height */
+  .sidebar-profile-section {
+    padding: 1rem 1.15rem !important;
+    /* Reduced padding from 1.25rem/1.5rem */
+  }
+
+  /* Reduce space between avatar and info container */
+  .sidebar-profile-section>div:first-child {
+    gap: 0.6rem !important;
+    /* Reduced from 0.75rem/0.85rem */
+    margin-bottom: 0.4rem !important;
+    /* Reduced space above the score */
+  }
+
+  /* 1. Reduce Avatar size */
+  .sidebar-profile-avatar {
+    width: 32px !important;
+    /* Reduced from 40px/42px (~20-25%) */
+    height: 32px !important;
+    font-size: var(--text-sm) !important;
+  }
+
+  /* 2. Reduce Username size */
+  .sidebar-profile-name {
+    font-size: var(--text-sm) !important;
+    /* Approx 25% smaller */
+  }
+
+  /* 3. Reduce Role Badge */
+  .sidebar-profile-role {
+    font-size: var(--text-xs) !important;
+    /* Smaller badge text */
+    padding: 0.1rem 0.4rem !important;
+    /* Tighter padding */
+    border-radius: 4px !important;
+    /* Slightly smaller radius */
+    margin-top: 0.15rem !important;
+  }
+
+  /* 4. Reduce Score Section */
+  .sidebar-profile-score {
+    font-size: var(--text-xs) !important;
+    /* Reduce Score label and pts by ~25% */
+    padding-top: 0.2rem !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE SIDEBAR WIDTH & COMPACTNESS OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 767px) {
+
+  /* Sidebar Drawer Container */
+  .mobile-sidebar-drawer {
+    overflow-x: hidden !important;
+  }
+
+  /* 1. Compact Header */
+  .mobile-sidebar-drawer img[src*="logo"] {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .mobile-sidebar-drawer>div:first-child>a>span {
+    font-size: var(--text-sm) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .mobile-sidebar-drawer>div:first-child {
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
+  }
+
+  /* 2. Compact Profile Section */
+  .mobile-sidebar-drawer .sidebar-profile-section {
+    padding-left: 0.85rem !important;
+    padding-right: 0.85rem !important;
+  }
+
+  /* 3. Navigation Items padding reduction */
+  .mobile-sidebar-drawer .sidebar-nav-link {
+    padding-left: 0.65rem !important;
+    padding-right: 0.65rem !important;
+  }
+
+  .mobile-sidebar-drawer nav {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE NAVBAR HEADER ALIGNMENT
+   ========================================================================== */
+@media (max-width: 767px) {
+  .dashboard-mobile-header {
+    padding-left: 0 !important;
+    /* Hamburger visible icon will sit at 12.5px from edge */
+    padding-right: 1.25rem !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE MARKETPLACE OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 767px) {
+
+  /* 1. Page Wrapper */
+  .marketplace-page-wrapper {
+    padding: 1rem 1rem 3rem !important;
+    /* Reduce the huge desktop padding */
+  }
+
+  .marketplace-catalog-card {
+    padding: 1rem !important;
+    /* Reduce inner padding of the tab/filter container */
+  }
+
+  /* 2. Hero Banner */
+  .marketplace-hero-card {
+    padding: 1.5rem 1rem !important;
+    gap: 1.25rem !important;
+  }
+
+  .marketplace-hero-title {
+    font-size: var(--text-2xl) !important;
+    /* ~25% smaller than the h1 default */
+  }
+
+  .marketplace-hero-desc {
+    font-size: var(--text-sm) !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .marketplace-hero-btn {
+    padding: 0.6rem 1.25rem !important;
+    font-size: var(--text-sm) !important;
+  }
+
+  .marketplace-hero-stats-container {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+  }
+
+  .marketplace-hero-stat-card {
+    min-width: 0 !important;
+    padding: 1rem !important;
+  }
+
+  /* 3. Wallet Statistics Cards */
+  .wallet-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    /* 2x2 grid */
+    gap: 0.75rem !important;
+  }
+
+  .wallet-stat-card {
+    padding: 0.75rem !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.5rem !important;
+    min-width: 0 !important;
+    /* Prevent flex overflow */
+  }
+
+  .wallet-stat-card>div:first-child {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .wallet-stat-card>div:first-child svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .wallet-stat-card>div:last-child {
+    font-size: var(--text-xs) !important;
+    word-break: break-word !important;
+  }
+
+  .wallet-stat-card>div:last-child>div:first-child {
+    font-size: var(--text-xs) !important;
+    /* label */
+    margin-bottom: 0.15rem !important;
+  }
+
+  .wallet-stat-card>div:last-child>div:last-child {
+    font-size: var(--text-sm) !important;
+    /* value */
+  }
+
+  /* 4. Reward Grid & Cards */
+  .reward-grid-container {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    /* Stack vertically, NEVER overflow */
+    gap: 1rem !important;
+  }
+
+  .reward-item-card {
+    min-width: 0 !important;
+    /* Fluidly resize down */
+  }
+
+  .reward-item-image {
+    height: 150px !important;
+    /* Shrink image height */
+  }
+
+  .reward-item-content {
+    padding: 1rem !important;
+  }
+
+  /* Card Typography & Buttons */
+  .reward-item-content h3 {
+    font-size: var(--text-base) !important;
+    /* Smaller title */
+  }
+
+  .reward-item-content>span {
+    font-size: var(--text-xs) !important;
+    /* Smaller category badge */
+  }
+
+  .reward-item-content>div:nth-child(3) {
+    font-size: var(--text-xs) !important;
+    /* Smaller Cost / Stock */
+    padding-top: 0.5rem !important;
+  }
+
+  .reward-item-content button {
+    padding: 0.5rem !important;
+    font-size: var(--text-xs) !important;
+    /* Reduce button text */
+    min-height: 44px !important;
+    /* Maintain touch accessibility */
+    white-space: nowrap !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE CONTRIBUTIONS OPTIMIZATIONS
+   ========================================================================== */
+@media (max-width: 767px) {
+
+  /* 1. Page Wrapper & Header */
+  .contributions-page-wrapper {
+    padding: 1rem 0.5rem 3rem !important;
+    /* Reduce top/horizontal padding */
+  }
+
+  .contributions-page-wrapper .page-title {
+    font-size: var(--text-2xl) !important;
+    /* ~25% smaller */
+  }
+
+  .contributions-page-wrapper .page-description {
+    font-size: var(--text-sm) !important;
+  }
+
+  /* 2. Stat Grid & Cards */
+  .contributions-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    /* 2x2 grid */
+    gap: 0.75rem !important;
+  }
+
+  .contribution-stat-card {
+    padding: 0.75rem !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.5rem !important;
+    min-width: 0 !important;
+  }
+
+  .contribution-stat-card>div:first-child {
+    padding: 0.5rem !important;
+  }
+
+  .contribution-stat-card>div:first-child svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .contribution-stat-card>div:last-child>div:nth-child(1) {
+    font-size: var(--text-lg) !important;
+    /* Value */
+    word-break: break-word !important;
+  }
+
+  .contribution-stat-card>div:last-child>div:nth-child(2) {
+    font-size: var(--text-xs) !important;
+    /* Label */
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .contribution-stat-card>div:last-child>div:nth-child(3) {
+    font-size: var(--text-xs) !important;
+    /* Trend */
+  }
+
+  /* 3. Contributions List Grid & Cards */
+  .contributions-list-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    /* Fluid single column */
+    gap: 1rem !important;
+  }
+
+  .contribution-item-card {
+    padding: 1rem !important;
+    min-width: 0 !important;
+  }
+
+  .contribution-item-card h3 {
+    font-size: var(--text-base) !important;
+  }
+
+  .contribution-item-card p {
+    font-size: var(--text-sm) !important;
+  }
+
+  /* Footer grid of 3 stats (Hours, Coins, Version) */
+  .contribution-item-card>div:nth-child(4) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.25rem !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  .contribution-item-card>div:nth-child(4)>div {
+    font-size: var(--text-xs) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Updated date text */
+  .contribution-item-card>div:last-child>span {
+    font-size: var(--text-xs) !important;
+  }
+
+  /* Action buttons (Eye, Edit, Trash) */
+  .contribution-item-card>div:last-child button {
+    padding: 0.35rem !important;
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+/* ────────────────────────────────────────────────────────
+   Dashboard Layout & Typography Overrides
+   ──────────────────────────────────────────────────────── */
+
+.navbar-page-title {
+  margin: 0 !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  /* Desktop (Target max 24px-32px) */
+  font-size: clamp(24px, 3vw, 28px) !important;
+}
+
+.dashboard-breadcrumb {
+  margin-bottom: 0.75rem !important;
+}
+
+.dashboard-breadcrumb ol li,
+.dashboard-breadcrumb ol li a,
+.dashboard-breadcrumb ol li span {
+  font-size: 15px !important;
+}
+
+.dashboard-mobile-header {
+  height: 56px !important;
+  padding: 0 1.5rem !important;
+}
+
+.dashboard-main-content {
+  padding: 1.5rem 1.5rem 0 1.5rem !important;
+}
+
+/* Tablet Rules */
+@media (max-width: 1024px) {
+  .navbar-page-title {
+    font-size: 24px !important;
+  }
+}
+
+/* Mobile Rules */
+@media (max-width: 768px) {
+  .navbar-page-title {
+    font-size: clamp(18px, 3.6vw, 20px) !important;
+  }
+
+  .dashboard-breadcrumb ol li,
+  .dashboard-breadcrumb ol li a,
+  .dashboard-breadcrumb ol li span {
+    font-size: 13px !important;
+  }
+
+  .dashboard-mobile-header {
+    height: 52px !important;
+    padding: 0 1rem !important;
+  }
+
+  .dashboard-main-content {
+    padding: 1rem 1rem 0 1rem !important;
+  }
+}
+
+/* --------------------------------------------------------
+   DASHBOARD TWO-COLUMN LAYOUT
+   -------------------------------------------------------- */
+.dashboard-two-column {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-two-column {
+    grid-template-columns: 6.5fr 3.5fr;
+  }
+}
+
+/* --------------------------------------------------------
+   DASHBOARD IMPACT LAYOUT
+   -------------------------------------------------------- */
+.dashboard-two-column-impact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+@media (min-width: 1024px) {
+  .dashboard-two-column-impact {
+    grid-template-columns: 3.5fr 6.5fr;
+  }
+}
+

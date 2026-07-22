@@ -1,0 +1,21 @@
+# Dependencies
+server/node_modules/
+
+# Local environment variables
+server/.env
+server/.env.local
+
+# Logs
+server/logs/
+*.log
+
+# Editor directories and files
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db

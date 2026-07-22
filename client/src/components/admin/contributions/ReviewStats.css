@@ -1,0 +1,114 @@
+/* ReviewStats.css */
+
+/* Desktop Layout (Default) */
+.contribution-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.contribution-stat-card {
+  padding: 20px;
+  min-height: 104px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contribution-stat-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.contribution-stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.contribution-stat-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.contribution-stat-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.contribution-stat-value {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.contribution-stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 6px;
+}
+
+/* Tablet Layout */
+@media (max-width: 1023px) {
+  .contribution-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile Layout */
+@media (max-width: 767px) {
+  .contribution-stats-grid {
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .contribution-stat-card {
+    padding: 12px;
+    min-height: 80px;
+    justify-content: flex-start;
+  }
+
+  .contribution-stat-inner {
+    gap: 8px;
+    width: 100%;
+  }
+
+  .contribution-stat-icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .contribution-stat-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .contribution-stat-content {
+    min-width: 0;
+  }
+
+  .contribution-stat-value {
+    font-size: 24px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .contribution-stat-label {
+    font-size: 10px;
+    margin-top: 4px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

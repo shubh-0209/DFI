@@ -1,0 +1,210 @@
+/* AdminDashboard.css */
+
+.admin-dashboard-page {
+  padding: 0.5rem 0 2rem 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-title {
+  font-size: var(--text-3xl);
+  margin: 0 0 0.5rem 0;
+  color: #1f2937;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.dashboard-subtitle {
+  color: #4b5563;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.dashboard-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.dashboard-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.card-heading {
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--text-lg);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.card-heading-icon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.health-status {
+  padding: 1rem;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.health-status-text {
+  color: #059669;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.health-status-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+  font-size: var(--text-sm);
+  flex-wrap: wrap;
+}
+
+.status-dot {
+  color: #059669;
+}
+
+.quick-actions-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.quick-action-btn {
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.btn-text-content {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Base text elements */
+.stat-card-value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--color-heading);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stat-card-label {
+  font-size: var(--text-sm);
+  color: var(--color-body);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .dashboard-main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  .admin-dashboard-page {
+    padding: 0 0 1rem 0;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* 
+   * Typography Scaling (Reduce ~25%)
+   * Applies via CSS variables and explicit classes to target all elements without breaking layout
+   */
+  .admin-dashboard-page {
+    --text-3xl: 24px !important;
+    --text-2xl: 18px !important;
+    --text-xl: 15px !important;
+    --text-lg: 14px !important;
+    --text-base: 12px !important;
+    --text-sm: 11px !important;
+    --text-xs: 9px !important;
+  }
+
+  /* Target explicit headers, texts, and classes used in the dashboard */
+  .admin-dashboard-page h1, .admin-dashboard-page .dashboard-title, .admin-dashboard-page .page-title, .admin-dashboard-page .text-3xl { font-size: 24px !important; }
+  .admin-dashboard-page h2, .admin-dashboard-page .section-heading, .admin-dashboard-page .text-2xl { font-size: 18px !important; }
+  .admin-dashboard-page h3, .admin-dashboard-page .card-heading, .admin-dashboard-page .card-title, .admin-dashboard-page .stat-card-value, .admin-dashboard-page .text-xl { font-size: 15px !important; }
+  .admin-dashboard-page h4, .admin-dashboard-page .card-subtitle, .admin-dashboard-page .text-lg { font-size: 14px !important; }
+  .admin-dashboard-page p, .admin-dashboard-page .page-description, .admin-dashboard-page .card-description, .admin-dashboard-page .table-cell, .admin-dashboard-page .btn, .admin-dashboard-page .btn-text, .admin-dashboard-page .text-base { font-size: 12px !important; }
+  .admin-dashboard-page .table-header, .admin-dashboard-page .stat-card-label, .admin-dashboard-page .status-badge, .admin-dashboard-page .badge-text, .admin-dashboard-page .health-status-text, .admin-dashboard-page .health-status-indicators, .admin-dashboard-page .text-sm, .admin-dashboard-page .badge { font-size: 11px !important; }
+  .admin-dashboard-page .text-xs { font-size: 9px !important; }
+
+  /* Ensure text wrapping for text elements, but protect buttons and badges */
+  .admin-dashboard-page p,
+  .admin-dashboard-page h1,
+  .admin-dashboard-page h2,
+  .admin-dashboard-page h3,
+  .admin-dashboard-page h4,
+  .admin-dashboard-page span:not(.badge):not(.badge-text):not(.status-badge) {
+    overflow-wrap: break-word;
+  }
+
+  .admin-dashboard-page button,
+  .admin-dashboard-page .btn,
+  .admin-dashboard-page .badge,
+  .admin-dashboard-page .badge-text,
+  .admin-dashboard-page .status-badge {
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+  }
+
+  .health-status-indicators {
+    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 1rem;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 20px;
+  }
+}

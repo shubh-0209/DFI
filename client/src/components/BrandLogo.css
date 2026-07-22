@@ -1,0 +1,62 @@
+.brand-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-logo-img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+.brand-logo-text-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-logo-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0B3B91; /* dark navy brand color */
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.brand-logo-tagline {
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748B;
+  margin: 4px 0 0 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Modifier for mobile authentication header (<= 768px) */
+.brand-logo-container.mobile-auth-logo {
+  display: none; /* hidden by default on desktop */
+}
+
+@media (max-width: 768px) {
+  .brand-logo-container.mobile-auth-logo {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .brand-logo-container.mobile-auth-logo .brand-logo-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .brand-logo-container.mobile-auth-logo .brand-logo-title {
+    font-size: 24px;
+  }
+  
+  .brand-logo-container.mobile-auth-logo .brand-logo-tagline {
+    font-size: 12px;
+  }
+}

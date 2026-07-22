@@ -1,0 +1,182 @@
+/* NotificationResponsive.css */
+
+/* Prevent horizontal scroll globally on notification components */
+.notif-page-container {
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}
+
+.notif-card-content {
+  min-width: 0 !important; /* Crucial for text truncation in flexbox */
+  flex: 1 !important;
+}
+
+/* Text Wrapping & Overflow Prevention */
+.notif-text-wrap {
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* Ensure title doesn't overflow */
+.notif-title-wrap {
+  overflow-wrap: break-word !important;
+  word-break: break-word !important;
+}
+
+/* Responsive adjustments (< 768px) */
+@media (max-width: 768px) {
+  /* 1. Mobile Typography Scaling (~25% reduction) */
+  .notif-heading {
+    font-size: 1.125rem !important; /* ~18px down from ~24px */
+  }
+  .notif-heading svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .notif-subheading {
+    font-size: 0.875rem !important; /* ~14px down from ~16px */
+  }
+  
+  .notif-title-wrap {
+    font-size: 0.875rem !important; /* ~14px */
+    white-space: normal !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  
+  .notif-message-wrap {
+    font-size: 0.75rem !important; /* ~12px */
+  }
+
+  .notif-meta-text {
+    font-size: 0.6875rem !important; /* ~11px */
+  }
+  .notif-meta-badge {
+    font-size: 0.6875rem !important;
+    padding: 0.1rem 0.4rem !important;
+  }
+
+  .notif-empty-title {
+    font-size: 1rem !important;
+  }
+  .notif-empty-desc {
+    font-size: 0.75rem !important;
+  }
+
+  /* 2. Notification Card Responsiveness */
+  .notif-page-container {
+    padding: 1rem 0.75rem !important; /* Reduce page padding */
+  }
+  
+  .notif-card {
+    padding: 0.75rem !important; /* Reduce padding */
+    gap: 0.625rem !important; /* Reduce gap */
+    width: 100% !important;
+    box-sizing: border-box !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .notif-card-compact {
+    padding: 0.5rem !important;
+  }
+  
+  .notif-icon-container {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+  }
+  .notif-icon-container svg, .notif-icon-container img {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  /* 4. Responsive Layout Fixes */
+  .notif-header-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.75rem !important;
+  }
+  
+  .notif-mark-read-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 0.5rem 1rem !important;
+    font-size: 0.875rem !important;
+  }
+
+
+
+  /* Filters */
+  .notif-filters-container {
+    padding: 0.75rem !important;
+  }
+  .notif-filters-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  .notif-filters-grid select {
+    width: 100% !important;
+    font-size: 0.875rem !important;
+    min-height: 36px !important;
+    padding: 0.375rem 0.5rem !important;
+  }
+  .notif-search-input {
+    font-size: 0.875rem !important;
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem !important;
+  }
+
+  /* Loading Skeleton */
+  .notif-skeleton-card {
+    height: auto !important;
+    min-height: 70px !important;
+    padding: 0.75rem !important;
+    gap: 0.625rem !important;
+  }
+  .notif-skeleton-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+}
+
+/* Fix grid for mobile and tablet properly */
+@media (min-width: 481px) and (max-width: 768px) {
+  .notif-filters-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Drawer Specific Responsive Fixes */
+@media (max-width: 768px) {
+  .notif-drawer-container {
+    top: 68px !important;
+    bottom: auto !important;
+    right: 12px !important;
+    width: calc(100vw - 24px) !important;
+    max-width: calc(100vw - 24px) !important;
+    height: 70vh !important;
+    max-height: 70vh !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+  }
+
+  .notif-drawer-header {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .notif-drawer-body {
+    padding: 0.75rem 1rem !important;
+    gap: 0.5rem !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .notif-drawer-footer {
+    padding: 0.75rem 1rem !important;
+  }
+}

@@ -1,0 +1,31 @@
+.back-button {
+  position: absolute;
+  top: 40px;
+  left: 48px;
+  width: 44px;
+  height: 44px;
+  background-color: #FFFFFF;
+  border: 1px solid #D9E6F5;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease-in-out;
+  z-index: 50;
+}
+
+.back-button:hover {
+  background-color: #F5F9FF;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .back-button {
+    top: 24px;
+    left: 24px;
+  }
+}

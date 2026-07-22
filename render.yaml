@@ -1,0 +1,10 @@
+services:
+  - type: static
+    name: disha-frontend
+    env: static
+    buildCommand: npm run build
+    staticPublishPath: client/dist
+    routes:
+      - source: "/*"
+        destination: /index.html
+        type: rewrite

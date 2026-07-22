@@ -1,0 +1,74 @@
+.auth-page {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+  position: relative;
+  background-color: #FFFFFF;
+  overflow: hidden;
+}
+
+.auth-left-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #F5F9FF;
+  padding: 2rem 4rem;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.auth-right-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Center the card horizontally */
+  background-color: #FFFFFF;
+  padding: 1rem;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* --- RESPONSIVE REDESIGN --- */
+
+/* Tablet (769px - 1023px) - Keep split screen but adjust spacing to prevent overflow */
+@media (max-width: 1023px) and (min-width: 769px) {
+  .auth-left-section {
+    padding: 2rem;
+  }
+
+  .auth-title {
+    font-size: 2rem !important;
+  }
+}
+
+/* Mobile & Small Tablet (<= 768px) - Single column, left section hidden */
+@media (max-width: 768px) {
+  .auth-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .auth-left-section {
+    display: none !important;
+  }
+
+  .auth-right-section {
+    flex: 1;
+    height: auto;
+    min-height: 100dvh;
+    padding: 2rem 1rem;
+    justify-content: center;
+    /* Center form vertically and horizontally */
+    overflow: visible;
+  }
+
+  .auth-form-container {
+    padding: 1.5rem !important;
+    border-radius: 20px !important;
+  }
+}

@@ -1,0 +1,42 @@
+export const heroImages = [
+  {
+    id: 1,
+    image: '/images/hero/media__1783229129311.jpg',
+    title: 'Empowering the Youth',
+    subtitle: 'Join us in shaping a brighter future through education and skill development.',
+    buttonText: 'Join as Volunteer',
+    buttonLink: '/register',
+    secondaryButtonText: 'Our Programs',
+    secondaryButtonLink: '/programs',
+  },
+  {
+    id: 2,
+    image: '/images/hero/media__1783229151877.jpg',
+    title: 'Transforming Communities',
+    subtitle: 'Be part of a movement that brings real change to the grassroots level.',
+    buttonText: 'See Our Impact',
+    buttonLink: '/about',
+    secondaryButtonText: 'Support Us',
+    secondaryButtonLink: '/donate',
+  },
+  {
+    id: 3,
+    image: '/images/hero/media__1783229162226.jpg',
+    title: 'Lead with Purpose',
+    subtitle: 'Become a changemaker and inspire others in your local community.',
+    buttonText: 'Get Involved',
+    buttonLink: '/register',
+    secondaryButtonText: 'Read Stories',
+    secondaryButtonLink: '/blog',
+  },
+  {
+    id: 4,
+    image: '/images/hero/media__1783229170128.jpg',
+    title: 'Connect Without Fear',
+    subtitle: 'Celebrating art, poetry, and relationships in our empowered society.',
+    buttonText: 'View Events',
+    buttonLink: '/programs',
+    secondaryButtonText: 'Gallery',
+    secondaryButtonLink: '/gallery',
+  }
+];
