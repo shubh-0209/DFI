@@ -641,24 +641,22 @@ const AdminPrograms = () => {
                           )}
 
                           {/* Display QR Shortcut */}
-                          {(prog.mode === 'offline' || prog.mode === 'hybrid') && (
-                            <button
-                              onClick={() => handleShowQr(id, prog.title)}
-                              title="Generate Attendance QR Code"
-                              style={{
-                                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                                width: 32, height: 32, borderRadius: 7,
-                                border: '1px solid var(--color-border)',
-                                background: 'var(--color-card)', cursor: 'pointer',
-                                color: 'var(--color-primary)',
-                                marginRight: '0.1rem'
-                              }}
-                              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.background = 'rgba(79, 70, 229, 0.05)'; }}
-                              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-primary)'; }}
-                            >
-                              <QrCode size={14} />
-                            </button>
-                          )}
+                          <button
+                            onClick={() => handleShowQr(id, prog.title)}
+                            title="Generate Attendance QR Code"
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                              width: 32, height: 32, borderRadius: 7,
+                              border: '1px solid var(--color-border)',
+                              background: 'var(--color-card)', cursor: 'pointer',
+                              color: 'var(--color-primary)',
+                              marginRight: '0.1rem'
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.background = 'rgba(79, 70, 229, 0.05)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-primary)'; }}
+                          >
+                            <QrCode size={14} />
+                          </button>
 
                           {/* Edit */}
                           <button

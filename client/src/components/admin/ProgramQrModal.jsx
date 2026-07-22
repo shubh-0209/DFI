@@ -212,35 +212,48 @@ const ProgramQrModal = ({ isOpen, onClose, programId, programTitle }) => {
             {tokenText && !loading && (
               <div 
                 style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  display: 'flex', flexDirection: 'column', gap: '0.5rem',
                   backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-border)',
-                  borderRadius: 10, padding: '0.5rem 0.75rem', marginBottom: '1rem',
-                  gap: '0.5rem'
+                  borderRadius: 10, padding: '0.75rem 1rem', marginBottom: '1rem',
+                  textAlign: 'left'
                 }}
               >
-                <div style={{ textAlign: 'left', overflow: 'hidden' }}>
-                  <div style={{ fontSize: '10px', color: 'var(--color-body)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                     Token Code (Manual Entry)
-                  </div>
-                  <div style={{ fontFamily: 'monospace', fontSize: '13px', fontWeight: 700, color: 'var(--color-heading)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {tokenText}
-                  </div>
+                  </span>
+                  <button
+                    onClick={handleCopyToken}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '0.35rem',
+                      padding: '0.3rem 0.65rem', borderRadius: 6,
+                      border: '1px solid var(--color-border)',
+                      backgroundColor: 'var(--color-card)',
+                      color: copied ? 'var(--color-success)' : 'var(--color-primary)',
+                      fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+                    }}
+                  >
+                    {copied ? <Check size={13} /> : <Copy size={13} />}
+                    {copied ? 'Copied!' : 'Copy Code'}
+                  </button>
                 </div>
-                <button
-                  onClick={handleCopyToken}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '0.3rem',
-                    padding: '0.4rem 0.65rem', borderRadius: 6,
-                    border: '1px solid var(--color-border)',
+                <div 
+                  style={{ 
+                    fontFamily: 'monospace', 
+                    fontSize: '12px', 
+                    fontWeight: 700, 
+                    color: 'var(--color-heading)', 
+                    wordBreak: 'break-all',
                     backgroundColor: 'var(--color-card)',
-                    color: copied ? 'var(--color-success)' : 'var(--color-primary)',
-                    fontSize: '12px', fontWeight: 600, cursor: 'pointer',
-                    whiteSpace: 'nowrap'
+                    padding: '0.5rem 0.75rem',
+                    borderRadius: 6,
+                    border: '1px solid var(--color-border)',
+                    userSelect: 'all',
+                    lineHeight: 1.4
                   }}
                 >
-                  {copied ? <Check size={14} /> : <Copy size={14} />}
-                  {copied ? 'Copied!' : 'Copy Code'}
-                </button>
+                  {tokenText}
+                </div>
               </div>
             )}
 
