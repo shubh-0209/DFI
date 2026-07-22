@@ -19,6 +19,8 @@ import { lazy } from 'react';
 // Pages
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Programs = lazy(() => import('./pages/Programs'));
 const Leaderboard = lazy(() => import('./pages/Leaderboard'));
@@ -135,12 +137,22 @@ function App() {
                   <Route path="programs" element={<Programs />} />
                   <Route path="programs/:id" element={<ProgramDetail />} />
                   <Route path="leaderboard" element={<Leaderboard />} />
-                  <Route path="login" element={<Login />} />
+                  <Route path="login" element={
+                    <RedirectIfAuthenticated>
+                      <Login />
+                    </RedirectIfAuthenticated>
+                  } />
                   <Route path="register" element={
                     <RedirectIfAuthenticated>
                       <Register />
                     </RedirectIfAuthenticated>
                   } />
+                  <Route path="forgot-password" element={
+                    <RedirectIfAuthenticated>
+                      <ForgotPassword />
+                    </RedirectIfAuthenticated>
+                  } />
+                  <Route path="reset-password" element={<ResetPassword />} />
                   <Route path="unauthorized" element={<Unauthorized />} />
                   <Route path="verify/:id" element={<VerifyCertificate />} />
                 </Route>

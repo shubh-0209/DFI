@@ -1,6 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Users, Calendar, Clock, Activity, TrendingUp, Target } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { getAdminDashboard, getLeaderboard } from '../../services/analyticsService';
 import { getNotifications } from '../../services/notificationsService';
 import { getAllPrograms } from '../../services/programsService';
@@ -17,6 +18,7 @@ import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { on } = useSocket();
 
@@ -122,7 +124,7 @@ const AdminDashboard = () => {
   }, [dashboardData, programsData]);
 
   const isLoading = dashboardLoading || leaderboardLoading || notificationsLoading;
-  
+
   if (isLoading) {
     return <SimpleLoader />;
   }
@@ -187,16 +189,16 @@ const AdminDashboard = () => {
               <Target size={18} className="card-heading-icon" /> Quick Actions
             </h3>
             <div className="quick-actions-grid">
-              <button className="btn btn-secondary quick-action-btn" onClick={() => window.location.href = '/admin/programs'}>
+              <button className="btn btn-secondary quick-action-btn" onClick={() => navigate('/admin/programs')}>
                 <span className="btn-text-content">Manage Programs</span>
               </button>
-              <button className="btn btn-secondary quick-action-btn" onClick={() => window.location.href = '/admin/applications'}>
+              <button className="btn btn-secondary quick-action-btn" onClick={() => navigate('/admin/applications')}>
                 <span className="btn-text-content">Review Applications</span>
               </button>
-              <button className="btn btn-secondary quick-action-btn" onClick={() => window.location.href = '/admin/attendance'}>
+              <button className="btn btn-secondary quick-action-btn" onClick={() => navigate('/admin/attendance')}>
                 <span className="btn-text-content">Mark Attendance</span>
               </button>
-              <button className="btn btn-secondary quick-action-btn" onClick={() => window.location.href = '/admin/insights'}>
+              <button className="btn btn-secondary quick-action-btn" onClick={() => navigate('/admin/insights')}>
                 <span className="btn-text-content">Insights & Trends</span>
               </button>
             </div>

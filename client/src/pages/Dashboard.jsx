@@ -12,14 +12,15 @@
  *  8. Quick Actions       (shortcut grid)
  */
 
-import React, { useMemo } from 'react';
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import React, { useMemo, useState } from 'react';
+import { useQuery, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Sparkles, Clock, Briefcase, Award,
-  TrendingUp, ChevronRight, ArrowUpRight,
+  TrendingUp, ChevronRight, ArrowUpRight, RotateCw,
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { useAuth } from '../context/AuthContext';
 import { getVolunteerDashboard, getMyRank, getLeaderboard } from '../services/analyticsService';
@@ -203,6 +204,20 @@ const UpcomingEvents = ({ programs }) => {
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const [lastUpdated, setLastUpdated] = useState(() => new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefreshDashboard = async () => {
+    setIsRefreshing(true);
+    await queryClient.invalidateQueries();
+    setLastUpdated(new Date());
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast.success('Dashboard updated!');
+    }, 400);
+  };
 
   /* ── data fetching ────────────────────────────────────────────────────── */
 
@@ -426,12 +441,30 @@ const Dashboard = () => {
           }}>
             <div style={{ position: 'relative', zIndex: 2 }}>
 
-              {/* Greeting */}
-              <h2 style={{
-                color: 'white', margin: '0 0 0.25rem 0', fontSize: '1.5rem'
-              }}>
-                {getGreeting()}, {firstName}! 👋
-              </h2>
+              {/* Greeting & Refresh Row */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                <h2 style={{ color: 'white', margin: 0, fontSize: '1.5rem' }}>
+                  {getGreeting()}, {firstName}! 👋
+                </h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.85)', background: 'rgba(255,255,255,0.15)', padding: '0.25rem 0.6rem', borderRadius: 999 }}>
+                    Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                  <button
+                    onClick={handleRefreshDashboard}
+                    disabled={isRefreshing}
+                    style={{
+                      background: 'rgba(255,255,255,0.2)', border: 'none', color: 'white',
+                      borderRadius: 999, width: 28, height: 28, display: 'flex',
+                      alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                      transition: 'background 0.2s'
+                    }}
+                    title="Refresh Dashboard"
+                  >
+                    <RotateCw size={14} style={{ animation: isRefreshing ? 'spin 1s linear infinite' : 'none' }} />
+                  </button>
+                </div>
+              </div>
 
               {/* Standing message — only when leaderboard data is available */}
               {standing && (

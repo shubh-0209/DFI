@@ -10,6 +10,7 @@ import StatusBadge from "../../components/volunteer/StatusBadge";
 const AdminAttendance = () => {
   const [stats, setStats] = useState(null);
   const [records, setRecords] = useState([]);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +31,15 @@ const AdminAttendance = () => {
     fetch();
   }, []);
 
-
+  const filteredRecords = records.filter(r => {
+    if (!search) return true;
+    const q = search.toLowerCase();
+    return (
+      r.volunteerName?.toLowerCase().includes(q) ||
+      r.programTitle?.toLowerCase().includes(q) ||
+      r.status?.toLowerCase().includes(q)
+    );
+  });
 
   const [headerActionsEl, setHeaderActionsEl] = useState(null);
   useEffect(() => {
@@ -80,7 +89,14 @@ const AdminAttendance = () => {
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <div style={{ position: 'relative' }}>
                   <Search size={16} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-body)' }} />
-                  <input type="text" placeholder="Search..." className="form-control" style={{ paddingLeft: '2.25rem' }} />
+                  <input
+                    type="text"
+                    placeholder="Search volunteer or program..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="form-control"
+                    style={{ paddingLeft: '2.25rem' }}
+                  />
                 </div>
               </div>
             </div>
@@ -98,16 +114,24 @@ const AdminAttendance = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {records.map((record, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <td style={{ padding: '1rem 1.5rem', fontWeight: 500 }}>{record.volunteerName}</td>
-                      <td style={{ padding: '1rem 1.5rem', fontSize: 'var(--text-base)' }}>{record.programTitle}</td>
-                      <td style={{ padding: '1rem 1.5rem', fontSize: 'var(--text-base)', color: 'var(--color-body)' }}>{record.checkInTime || '-'}</td>
-                      <td style={{ padding: '1rem 1.5rem', fontSize: 'var(--text-base)', color: 'var(--color-body)' }}>{record.checkOutTime || '-'}</td>
-                      <td style={{ padding: '1rem 1.5rem' }}><StatusBadge status={record.status} /></td>
-                      <td style={{ padding: '1rem 1.5rem', fontWeight: 600, color: 'var(--color-primary)' }}>{record.hoursWorked || '-'}</td>
+                  {filteredRecords.length > 0 ? (
+                    filteredRecords.map((record, i) => (
+                      <tr key={i} style={{ borderBottom: '1px solid var(--color-border)' }}>
+                        <td style={{ padding: '1rem 1.5rem', fontWeight: 500 }}>{record.volunteerName}</td>
+                        <td style={{ padding: '1rem 1.5rem', fontSize: 'var(--text-base)' }}>{record.programTitle}</td>
+                        <td style={{ padding: '1rem 1.5rem', fontSize: 'var(--text-base)', color: 'var(--color-body)' }}>{record.checkInTime || '-'}</td>
+                        <td style={{ padding: '1rem 1.5rem', fontSize: 'var(--text-base)', color: 'var(--color-body)' }}>{record.checkOutTime || '-'}</td>
+                        <td style={{ padding: '1rem 1.5rem' }}><StatusBadge status={record.status} /></td>
+                        <td style={{ padding: '1rem 1.5rem', fontWeight: 600, color: 'var(--color-primary)' }}>{record.hoursWorked || '-'}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} style={{ padding: '3rem', textAlign: 'center', color: 'var(--color-body)' }}>
+                        No check-in records found.
+                      </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>

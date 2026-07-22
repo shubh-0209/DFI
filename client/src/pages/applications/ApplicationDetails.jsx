@@ -1,5 +1,5 @@
 import SimpleLoader from '../../components/common/SimpleLoader';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, FileText, CheckCircle, MapPin } from 'lucide-react';
@@ -7,11 +7,13 @@ import { useVolunteer } from '../../context/VolunteerContext';
 import StatusBadge from '../../components/volunteer/StatusBadge';
 import CoordinatorCard from '../../components/volunteer/CoordinatorCard';
 import ApplicationTimeline from '../../components/volunteer/ApplicationTimeline';
+import ConfirmModal from '../../components/volunteer/ConfirmModal';
 
 const ApplicationDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentApplication, fetchApplicationById, applicationsLoading, withdrawApplication } = useVolunteer();
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
 
   useEffect(() => {
     fetchApplicationById(id);
@@ -121,17 +123,27 @@ const ApplicationDetails = () => {
                 If you are no longer able to participate in this program, you can withdraw your application. This action cannot be undone.
               </p>
               <button 
-                onClick={() => {
-                  if(window.confirm('Are you sure you want to withdraw?')) {
-                    withdrawApplication(id).then(() => navigate('/applications'));
-                  }
-                }} 
+                onClick={() => setWithdrawModalOpen(true)} 
                 className="btn btn-danger"
               >
                 Withdraw Application
               </button>
             </div>
           )}
+
+          <ConfirmModal
+            isOpen={withdrawModalOpen}
+            onClose={() => setWithdrawModalOpen(false)}
+            onConfirm={async () => {
+              await withdrawApplication(id);
+              setWithdrawModalOpen(false);
+              navigate('/applications');
+            }}
+            title="Withdraw Application"
+            message="Are you sure you want to withdraw this application? This action cannot be undone."
+            confirmLabel="Withdraw"
+            confirmVariant="danger"
+          />
         </div>
 
         {/* Right Column - Sidebar */}

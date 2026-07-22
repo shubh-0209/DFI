@@ -167,14 +167,26 @@ const AdminPrograms = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editProgram, setEditProgram] = useState(null);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [search, setSearch] = useState(() => sessionStorage.getItem('admin_programs_search') || '');
+  const [statusFilter, setStatusFilter] = useState(() => sessionStorage.getItem('admin_programs_status') || '');
+  const [categoryFilter, setCategoryFilter] = useState(() => sessionStorage.getItem('admin_programs_category') || '');
   const [deletingId, setDeletingId] = useState(null);
   const [publishingId, setPublishingId] = useState(null);
   const [archivingId, setArchivingId] = useState(null);
   const [restoringId, setRestoringId] = useState(null);
   const [showArchived, setShowArchived] = useState(false);
+
+  useEffect(() => {
+    sessionStorage.setItem('admin_programs_search', search);
+  }, [search]);
+
+  useEffect(() => {
+    sessionStorage.setItem('admin_programs_status', statusFilter);
+  }, [statusFilter]);
+
+  useEffect(() => {
+    sessionStorage.setItem('admin_programs_category', categoryFilter);
+  }, [categoryFilter]);
 
   const [qrProgramId, setQrProgramId] = useState(null);
   const [qrProgramTitle, setQrProgramTitle] = useState('');
@@ -295,10 +307,41 @@ const AdminPrograms = () => {
     setArchivingId(id);
     try {
       await archiveProgram(id);
-      toast.success('Program archived.');
       queryClient.invalidateQueries({ queryKey: ['admin-programs'] });
       queryClient.invalidateQueries({ queryKey: ['admin-dashboard'] });
       queryClient.invalidateQueries({ queryKey: ['admin-programs-summary'] });
+
+      toast((t) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <span>Program archived.</span>
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                await restoreProgram(id);
+                toast.success('Program restored!');
+                queryClient.invalidateQueries({ queryKey: ['admin-programs'] });
+                queryClient.invalidateQueries({ queryKey: ['admin-dashboard'] });
+                queryClient.invalidateQueries({ queryKey: ['admin-programs-summary'] });
+              } catch (e) {
+                toast.error('Failed to undo archive');
+              }
+            }}
+            style={{
+              background: 'var(--color-primary)',
+              color: '#fff',
+              border: 'none',
+              padding: '0.25rem 0.65rem',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '0.8rem',
+              fontWeight: 600
+            }}
+          >
+            Undo
+          </button>
+        </div>
+      ), { duration: 6000 });
     } catch (err) {
       toast.error(err?.message || 'Failed to archive program.');
     } finally {

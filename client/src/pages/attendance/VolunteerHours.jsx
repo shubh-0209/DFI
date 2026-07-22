@@ -7,7 +7,10 @@ import VolunteerHoursCard from '../../components/volunteer/VolunteerHoursCard';
 import HoursChart from '../../components/volunteer/HoursChart';
 
 
+import { useAuth } from '../../context/AuthContext';
+
 const VolunteerHours = () => {
+  const { user } = useAuth();
   const { volunteerHours, hoursLoading, fetchVolunteerHours } = useVolunteer();
 
   useEffect(() => {
@@ -18,6 +21,32 @@ const VolunteerHours = () => {
     return <div className="page-container" style={{ padding: '2rem' }}><SimpleLoader /></div>;
   }
 
+  const handleDownloadReport = () => {
+    if (!volunteerHours) return;
+    const headers = ['Metric', 'Value'];
+    const rows = [
+      ['Volunteer Name', user?.name || 'Volunteer'],
+      ['Volunteer ID', user?.volunteerId || 'N/A'],
+      ['Report Date', new Date().toLocaleDateString('en-IN')],
+      ['Hours Today', volunteerHours.today || 0],
+      ['Hours This Week', volunteerHours.thisWeek || 0],
+      ['Hours This Month', volunteerHours.thisMonth || 0],
+      ['Lifetime Hours', volunteerHours.lifetime || 0],
+      ['', ''],
+      ['Program Name', 'Hours Contributed'],
+      ...(volunteerHours.programBreakdown || []).map(p => [p.program, p.hours]),
+    ];
+
+    const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(e => e.map(cell => `"${cell}"`).join(',')).join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `Volunteer_Hours_Report_${user?.name?.replace(/\s+/g, '_') || 'Volunteer'}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="page-container" style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
@@ -25,7 +54,11 @@ const VolunteerHours = () => {
           <h1 style={{ marginBottom: '0.5rem' }}>Volunteer Hours</h1>
           <p style={{ color: 'var(--color-body)' }}>Track your impact and download your certificates.</p>
         </div>
-        <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <button
+          onClick={handleDownloadReport}
+          className="btn btn-primary"
+          style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+        >
           <Download size={16} /> Download Summary Report
         </button>
       </div>

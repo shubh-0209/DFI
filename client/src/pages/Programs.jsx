@@ -22,10 +22,11 @@ import React, { useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   Search, MapPin, Calendar, Users, Filter,
-  BookOpen, Leaf, Heart, Globe, Shield, Zap, Grid3X3, Coins,
+  BookOpen, Leaf, Heart, Globe, Shield, Zap, Grid3X3, Coins, RotateCw, Sparkles,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import SimpleLoader from '../components/common/SimpleLoader';
 import { getPrograms } from '../services/programsService';
 import useSocket from '../hooks/useSocket';
@@ -172,9 +173,31 @@ const Programs = () => {
   const queryClient = useQueryClient();
   const { on, isConnected } = useSocket();
 
-  const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [selectedMode, setSelectedMode] = useState('all');
+  const [search, setSearch] = useState(() => sessionStorage.getItem('programs_search') || '');
+  const [selectedCategory, setSelectedCategory] = useState(() => sessionStorage.getItem('programs_category') || 'All');
+  const [selectedMode, setSelectedMode] = useState(() => sessionStorage.getItem('programs_mode') || 'all');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    sessionStorage.setItem('programs_search', search);
+  }, [search]);
+
+  useEffect(() => {
+    sessionStorage.setItem('programs_category', selectedCategory);
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    sessionStorage.setItem('programs_mode', selectedMode);
+  }, [selectedMode]);
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await queryClient.invalidateQueries({ queryKey: ['volunteer-programs'] });
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast.success('Programs updated!');
+    }, 400);
+  };
 
   /* ── data fetch via React Query ───────────────────────────────── */
 
@@ -335,6 +358,16 @@ const Programs = () => {
             <option value="online">Online</option>
             <option value="hybrid">Hybrid</option>
           </select>
+          <button
+            onClick={handleRefresh}
+            className="btn btn-secondary"
+            disabled={isRefreshing}
+            title="Refresh Programs Data"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.6rem 0.85rem' }}
+          >
+            <RotateCw size={15} style={{ animation: isRefreshing ? 'spin 1s linear infinite' : 'none' }} />
+            <span style={{ fontSize: '0.85rem' }}>Refresh</span>
+          </button>
         </div>
       </div>
 

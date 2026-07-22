@@ -1,40 +1,45 @@
 import SimpleLoader from '../../components/common/SimpleLoader';
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Camera, Save, Key, X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Camera, Save, X, User, Phone, MapPin, GraduationCap, Code, Globe, Trash2, Award, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../services/supabaseClient';
-
-
 
 const MyProfile = () => {
   const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
-  
+
   // States
   const [isSaving, setIsSaving] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
-  
+
   // Refs
   const fileInputRef = useRef(null);
 
-  // Global Form
+  // Form setup
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors, isDirty },
     reset,
-    setValue
   } = useForm({
     defaultValues: {
       name: user?.name || '',
-      phone: user?.phone || ''
-    }
+      phone: user?.phone || '',
+      city: user?.city || '',
+      state: user?.state || '',
+      college: user?.college || '',
+      course: user?.course || '',
+      graduationYear: user?.graduationYear || '',
+      about: user?.about || '',
+      skills: Array.isArray(user?.skills) ? user.skills.join(', ') : (user?.skills || ''),
+      languages: Array.isArray(user?.languages) ? user.languages.join(', ') : (user?.languages || ''),
+      interests: Array.isArray(user?.interests) ? user.interests.join(', ') : (user?.interests || ''),
+      linkedin: user?.linkedin || '',
+      portfolio: user?.portfolio || '',
+    },
   });
 
   // Handlers
@@ -53,11 +58,11 @@ const MyProfile = () => {
       formData.append('profilePhoto', file);
 
       await api.patch('/users/profile-photo', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
-      
+
       await refreshUser();
-      toast.success('Profile photo updated');
+      toast.success('Profile photo updated successfully');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to upload photo');
     } finally {
@@ -66,35 +71,54 @@ const MyProfile = () => {
     }
   };
 
+  const handleRemovePhoto = async () => {
+    try {
+      setPhotoUploading(true);
+      await api.put('/users/me', { profilePhoto: '' });
+      await refreshUser();
+      toast.success('Profile photo removed');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to remove photo');
+    } finally {
+      setPhotoUploading(false);
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       setIsSaving(true);
-      let requiresRefresh = false;
 
+      const parseArrayField = (val) => {
+        if (!val) return [];
+        if (Array.isArray(val)) return val;
+        return val.split(',').map((s) => s.trim()).filter(Boolean);
+      };
 
-
-      // 2. Process Profile Update
       const profilePayload = {
         name: data.name,
-        phone: data.phone
+        phone: data.phone,
+        city: data.city,
+        state: data.state,
+        college: data.college,
+        course: data.course,
+        graduationYear: data.graduationYear ? Number(data.graduationYear) : undefined,
+        about: data.about,
+        skills: parseArrayField(data.skills),
+        languages: parseArrayField(data.languages),
+        interests: parseArrayField(data.interests),
+        linkedin: data.linkedin,
+        portfolio: data.portfolio,
       };
 
       await api.put('/users/me', profilePayload);
-      requiresRefresh = true;
+      await refreshUser();
+      toast.success('Profile updated successfully');
 
-      if (requiresRefresh) {
-        await refreshUser();
-        toast.success('Profile saved successfully');
-        
-        // Reset form dirty state with new values
-        reset({
-          name: data.name,
-          phone: data.phone
-        });
-      }
-
+      reset({
+        ...data,
+      });
     } catch (error) {
-      toast.error(error.message || error.response?.data?.message || 'Failed to save settings');
+      toast.error(error.message || error.response?.data?.message || 'Failed to save profile');
     } finally {
       setIsSaving(false);
     }
@@ -102,7 +126,7 @@ const MyProfile = () => {
 
   const handleCancel = () => {
     reset();
-    navigate(-1); // Or back to dashboard
+    navigate(-1);
   };
 
   return (
@@ -122,55 +146,59 @@ const MyProfile = () => {
           align-items: flex-end;
           justify-content: space-between;
           flex-wrap: wrap;
-          gap: 0.5rem;
+          gap: 1rem;
         }
         .profile-form {
           display: flex;
           flex-direction: column;
           gap: 2rem;
-          max-width: 800px;
+          max-width: 900px;
           width: 100%;
         }
         .profile-card {
-          padding: 2.5rem;
+          padding: 2rem;
           box-shadow: var(--shadow-md);
-          border-color: var(--color-border);
+          border: 1px solid var(--color-border);
           width: 100%;
           overflow: hidden;
+          background: white;
+          border-radius: var(--radius-lg);
         }
         .profile-card-title {
-          font-size: var(--text-xl);
+          font-size: var(--text-lg);
           margin: 0;
           font-weight: 700;
           color: var(--color-heading);
           border-bottom: 1px solid var(--color-border);
-          padding-bottom: 1.25rem;
-          margin-bottom: 2.5rem;
-        }
-        .profile-card-content {
+          padding-bottom: 1rem;
+          margin-bottom: 1.5rem;
           display: flex;
-          flex-direction: column;
-          gap: 2.5rem;
+          align-items: center;
+          gap: 0.5rem;
         }
-        .profile-grid {
+        .profile-grid-2 {
           display: grid;
           grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 1.5rem;
+          gap: 1.25rem;
+        }
+        .profile-grid-3 {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 1.25rem;
         }
         .profile-avatar-row {
           display: flex;
           align-items: center;
           gap: 1.5rem;
-          margin-top: 0.5rem;
         }
         .profile-avatar-container {
           position: relative;
           flex-shrink: 0;
         }
         .profile-avatar-circle {
-          width: 72px;
-          height: 72px;
-          border-radius: var(--radius-lg);
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
           overflow: hidden;
           background-color: var(--color-primary);
           color: #fff;
@@ -181,35 +209,23 @@ const MyProfile = () => {
           font-weight: bold;
           box-shadow: var(--shadow-md);
         }
-        .profile-avatar-btn {
-          position: absolute;
-          bottom: -6px;
-          right: -6px;
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          background-color: var(--color-card);
-          border: 1px solid var(--color-border);
-          box-shadow: var(--shadow-sm);
+        .profile-avatar-actions {
           display: flex;
+          gap: 0.75rem;
           align-items: center;
-          justify-content: center;
-          color: var(--color-body);
-          cursor: pointer;
-          transition: var(--transition-fast);
         }
-        .profile-avatar-text-container {
-          flex: 1;
-          min-width: 0;
+        .profile-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.35rem 0.75rem;
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          background: #EFF6FF;
+          color: #1D4ED8;
+          border: 1px solid #BFDBFE;
         }
-        .profile-avatar-text {
-          font-size: var(--text-sm);
-          color: var(--color-body);
-          margin: 0;
-          line-height: 1.4;
-          word-break: break-word;
-        }
-
         .profile-actions {
           display: flex;
           gap: 1rem;
@@ -217,54 +233,21 @@ const MyProfile = () => {
           padding-top: 1rem;
         }
 
-        /* MOBILE RESPONSIVE OVERRIDES */
         @media (max-width: 767px) {
           .profile-wrapper {
             padding: 0.5rem 1rem 2rem;
           }
-          .page-title {
-            font-size: clamp(1.65rem, 4vw, 2.4rem) !important;
-          }
-          .page-description {
-            font-size: 0.75rem !important;
-          }
-          .profile-form {
-            gap: 1.25rem;
+          .profile-grid-2, .profile-grid-3 {
+            grid-template-columns: 1fr !important;
+            gap: 1rem;
           }
           .profile-card {
             padding: 1.25rem !important;
           }
-          .profile-card-title {
-            font-size: 0.95rem !important; /* ~25% smaller */
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
-          }
-          .profile-card-content {
-            gap: 1.5rem;
-          }
-          .profile-grid {
-            grid-template-columns: 1fr !important;
-            gap: 1.25rem;
-          }
-          .form-label {
-            font-size: 0.65rem !important;
-          }
-          .form-control {
-            font-size: 0.75rem !important;
-            padding: 0.6rem 0.8rem;
-          }
           .profile-avatar-row {
-            gap: 1rem;
+            flex-direction: column;
+            align-items: flex-start;
           }
-          .profile-avatar-circle {
-            width: 56px !important;
-            height: 56px !important;
-            font-size: 1.4rem !important;
-          }
-          .profile-avatar-text {
-            font-size: 0.65rem !important;
-          }
-
           .profile-actions {
             flex-direction: column;
             width: 100%;
@@ -275,100 +258,254 @@ const MyProfile = () => {
           }
         }
       `}</style>
-      
-      {/* ── Header ───────────────────────────────────────────────── */}
+
+      {/* Header */}
       <div className="profile-header-container">
         <div className="profile-header-flex">
-          <div style={{ width: '100%' }}>
-            <h1 className="page-title" style={{ color: 'var(--color-heading)', margin: 0, wordBreak: 'break-word' }}>
+          <div>
+            <h1 className="page-title" style={{ color: 'var(--color-heading)', margin: 0 }}>
               My Profile
             </h1>
-            <p className="page-description" style={{ color: 'var(--color-body)', margin: '0.3rem 0 0', wordBreak: 'break-word' }}>
-              View and manage your personal information and account settings.
+            <p className="page-description" style={{ color: 'var(--color-body)', margin: '0.3rem 0 0' }}>
+              Manage your personal information, education, and volunteer credentials.
             </p>
+          </div>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <span className="profile-badge">
+              <Award size={14} /> Role: {user?.role?.toUpperCase() || 'VOLUNTEER'}
+            </span>
+            {user?.volunteerId && (
+              <span className="profile-badge" style={{ background: '#F0FDF4', color: '#15803D', borderColor: '#BBF7D0' }}>
+                <Sparkles size={14} /> ID: {user.volunteerId}
+              </span>
+            )}
           </div>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="profile-form">
-        
-        {/* 1. Profile Information Card */}
-        <div className="card profile-card">
+        {/* 1. Avatar & System Info Card */}
+        <div className="profile-card">
           <h2 className="profile-card-title">
-            Profile Information
+            <User size={18} /> Profile Picture & Overview
           </h2>
-          <div className="profile-card-content">
-            <div className="profile-grid">
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Full Name</label>
-                <input
-                  {...register('name', { required: 'Name is required' })}
-                  className="form-control"
-                  placeholder="John Doe"
-                />
-                {errors.name && <span style={{ color: 'var(--color-error)', fontSize: 'var(--text-xs)', marginTop: '0.25rem', display: 'block' }}>{errors.name.message}</span>}
+          <div className="profile-avatar-row">
+            <div className="profile-avatar-container">
+              <div className="profile-avatar-circle">
+                {user?.profilePhoto ? (
+                  <img src={user.profilePhoto} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                ) : (
+                  user?.name?.charAt(0)?.toUpperCase() || 'U'
+                )}
               </div>
-              
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Phone Number</label>
-                <input
-                  {...register('phone')}
-                  className="form-control"
-                  placeholder="+91 98765 43210"
-                />
-              </div>
+            </div>
+            <div style={{ flex: 1 }}>
+              <div className="profile-avatar-actions">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={photoUploading}
+                  className="btn btn-secondary"
+                  style={{ fontSize: '0.85rem', gap: '0.4rem' }}
+                >
+                  {photoUploading ? <SimpleLoader /> : <Camera size={16} />} Upload New Photo
+                </button>
 
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Email Address</label>
+                {user?.profilePhoto && (
+                  <button
+                    type="button"
+                    onClick={handleRemovePhoto}
+                    disabled={photoUploading}
+                    className="btn btn-secondary"
+                    style={{ color: 'var(--color-error)', borderColor: 'rgba(239, 68, 68, 0.3)', fontSize: '0.85rem', gap: '0.4rem' }}
+                  >
+                    <Trash2 size={16} /> Remove Photo
+                  </button>
+                )}
+
                 <input
-                  value={user?.email || ''}
-                  disabled
-                  className="form-control"
-                  style={{ backgroundColor: 'var(--background)', color: 'var(--color-body)', cursor: 'not-allowed' }}
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handlePhotoUpload}
+                  accept="image/jpeg,image/png,image/webp"
+                  style={{ display: 'none' }}
                 />
               </div>
-
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <label className="form-label">Profile Picture</label>
-                <div className="profile-avatar-row">
-                  <div className="profile-avatar-container">
-                    <div className="profile-avatar-circle">
-                      {user?.profilePhoto ? (
-                        <img src={user.profilePhoto} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      ) : (
-                        user?.name?.charAt(0)?.toUpperCase() || 'U'
-                      )}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => fileInputRef.current?.click()}
-                      disabled={photoUploading}
-                      className="profile-avatar-btn"
-                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
-                      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-body)'}
-                    >
-                      {photoUploading ? <SimpleLoader /> : <Camera size={14} />}
-                    </button>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handlePhotoUpload}
-                      accept="image/jpeg,image/png,image/webp"
-                      style={{ display: 'none' }}
-                    />
-                  </div>
-                  <div className="profile-avatar-text-container">
-                    <p className="profile-avatar-text">
-                      Upload a new avatar.<br/>PNG, JPG or WebP (max 5MB).
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-body)', marginTop: '0.5rem', margin: 0 }}>
+                Allowed formats: PNG, JPG, or WebP. Maximum file size: 5MB.
+              </p>
             </div>
           </div>
         </div>
 
+        {/* 2. Personal Information Card */}
+        <div className="profile-card">
+          <h2 className="profile-card-title">
+            <User size={18} /> Basic Details
+          </h2>
+          <div className="profile-grid-2">
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Full Name</label>
+              <input
+                {...register('name', { required: 'Name is required' })}
+                className="form-control"
+                placeholder="John Doe"
+              />
+              {errors.name && <span style={{ color: 'var(--color-error)', fontSize: 'var(--text-xs)', marginTop: '0.25rem', display: 'block' }}>{errors.name.message}</span>}
+            </div>
 
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Phone Number</label>
+              <input
+                {...register('phone')}
+                className="form-control"
+                placeholder="+91 98765 43210"
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Username</label>
+              <input
+                value={user?.username || ''}
+                disabled
+                className="form-control"
+                style={{ backgroundColor: '#F8FAFC', color: 'var(--color-body)', cursor: 'not-allowed' }}
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Email Address</label>
+              <input
+                value={user?.email || ''}
+                disabled
+                className="form-control"
+                style={{ backgroundColor: '#F8FAFC', color: 'var(--color-body)', cursor: 'not-allowed' }}
+              />
+            </div>
+          </div>
+
+          <div className="form-group" style={{ marginTop: '1.25rem', marginBottom: 0 }}>
+            <label className="form-label">About / Bio</label>
+            <textarea
+              {...register('about')}
+              rows={3}
+              className="form-control"
+              placeholder="Tell us a little bit about yourself, your goals, and your passion for volunteering..."
+              maxLength={500}
+            />
+          </div>
+        </div>
+
+        {/* 3. Location & Education Card */}
+        <div className="profile-card">
+          <h2 className="profile-card-title">
+            <GraduationCap size={18} /> Location & Education
+          </h2>
+          <div className="profile-grid-2" style={{ marginBottom: '1.25rem' }}>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">City</label>
+              <input
+                {...register('city')}
+                className="form-control"
+                placeholder="New Delhi"
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">State</label>
+              <input
+                {...register('state')}
+                className="form-control"
+                placeholder="Delhi"
+              />
+            </div>
+          </div>
+
+          <div className="profile-grid-3">
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">College / Institution</label>
+              <input
+                {...register('college')}
+                className="form-control"
+                placeholder="Delhi University, IIT, etc."
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Course / Degree</label>
+              <input
+                {...register('course')}
+                className="form-control"
+                placeholder="B.Tech, B.Sc, BA, etc."
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Graduation Year</label>
+              <input
+                type="number"
+                {...register('graduationYear')}
+                className="form-control"
+                placeholder="2027"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Skills, Languages & Socials */}
+        <div className="profile-card">
+          <h2 className="profile-card-title">
+            <Code size={18} /> Skills & Links
+          </h2>
+          <div className="profile-grid-2" style={{ marginBottom: '1.25rem' }}>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Skills (comma separated)</label>
+              <input
+                {...register('skills')}
+                className="form-control"
+                placeholder="Teaching, Public Speaking, Management"
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Languages (comma separated)</label>
+              <input
+                {...register('languages')}
+                className="form-control"
+                placeholder="English, Hindi, Regional"
+              />
+            </div>
+          </div>
+
+          <div className="form-group" style={{ marginBottom: '1.25rem' }}>
+            <label className="form-label">Interests (comma separated)</label>
+            <input
+              {...register('interests')}
+              className="form-control"
+              placeholder="Education, Healthcare, Environment, Youth"
+            />
+          </div>
+
+          <div className="profile-grid-2">
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">LinkedIn Profile URL</label>
+              <input
+                {...register('linkedin')}
+                className="form-control"
+                placeholder="https://linkedin.com/in/username"
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Portfolio / Website URL</label>
+              <input
+                {...register('portfolio')}
+                className="form-control"
+                placeholder="https://yourwebsite.com"
+              />
+            </div>
+          </div>
+        </div>
 
         {/* Action Buttons */}
         <div className="profile-actions">
@@ -376,12 +513,11 @@ const MyProfile = () => {
             type="submit"
             disabled={!isDirty || isSaving}
             className="btn btn-primary"
-            style={{ opacity: (!isDirty || isSaving) ? 0.6 : 1, cursor: (!isDirty || isSaving) ? 'not-allowed' : 'pointer' }}
+            style={{ opacity: !isDirty || isSaving ? 0.6 : 1, cursor: !isDirty || isSaving ? 'not-allowed' : 'pointer' }}
           >
-            {isSaving ? <SimpleLoader /> : <Save size={18} />}
-            Save Changes
+            {isSaving ? <SimpleLoader /> : <Save size={18} />} Save Profile Changes
           </button>
-          
+
           <button
             type="button"
             onClick={handleCancel}
@@ -389,11 +525,9 @@ const MyProfile = () => {
             className="btn btn-secondary"
             style={{ border: '1px solid var(--color-border)', color: 'var(--color-heading)' }}
           >
-            <X size={18} />
-            Cancel
+            <X size={18} /> Cancel
           </button>
         </div>
-
       </form>
     </div>
   );

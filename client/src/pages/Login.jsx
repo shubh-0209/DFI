@@ -29,9 +29,11 @@ const Login = () => {
     }
   }, [user, navigate, isSubmitting]);
 
-  // Show a message if session expired or Google Auth failed
+  // Show a message if session expired, registration completed, password reset, or Google Auth failed
   const expired = searchParams.get('expired');
   const errorParam = searchParams.get('error');
+  const registered = searchParams.get('registered');
+  const resetSuccess = searchParams.get('reset');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,6 +97,24 @@ const Login = () => {
               <p className="text-[13px]" style={{ color: '#64748B' }}>Continue your journey with Disha For India</p>
             </div>
 
+            {registered && (
+              <div style={{
+                display: 'flex', gap: '0.5rem', alignItems: 'center', padding: '0.75rem',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-secondary)',
+                borderRadius: '12px', marginBottom: '1.25rem' }}>
+                <span className="text-[13px]">Account created successfully! Please sign in below.</span>
+              </div>
+            )}
+
+            {resetSuccess && (
+              <div style={{
+                display: 'flex', gap: '0.5rem', alignItems: 'center', padding: '0.75rem',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-secondary)',
+                borderRadius: '12px', marginBottom: '1.25rem' }}>
+                <span className="text-[13px]">Password reset successful! Please sign in with your new password.</span>
+              </div>
+            )}
+
             {expired && (
               <div style={{
                 display: 'flex', gap: '0.5rem', alignItems: 'center', padding: '0.75rem',
@@ -148,7 +168,7 @@ const Login = () => {
               <div className="form-group" style={{ marginBottom: '1.25rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                   <label className="form-label text-[13px] font-medium" htmlFor="password" style={{ marginBottom: 0 }}>Password</label>
-                  <a href="#" className="text-[13px] font-medium" style={{ color: '#0B3B91', textDecoration: 'none' }}>Forgot Password?</a>
+                  <Link to="/forgot-password" className="text-[13px] font-medium" style={{ color: '#0B3B91', textDecoration: 'none' }}>Forgot Password?</Link>
                 </div>
                 <div style={{ position: 'relative' }}>
                   <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748B' }}>
