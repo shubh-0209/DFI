@@ -141,6 +141,8 @@ const CheckOut = () => {
             onCheckOut={handleCheckOut}
             loading={loading}
           />
+        </div>
+
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem' }}>
           <button 
             type="button" 
